@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: portfolio
+    // Document ID: auto-generated
+    // Fields:
+    //   - img: string (required, < 1MB) - URL or base64 string of the image
+    //   - title: string (required, < 100 chars) - Title of the portfolio item
+    //   - category: string (required, < 50 chars) - Category of the portfolio item
+    //   - createdAt: number (required) - Timestamp when the item was created
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.email == "jahidhasan47099@gmail.com";
+    }
+    
+    function isValidPortfolioItem(data) {
+      return data.keys().hasOnly(['img', 'title', 'category', 'createdAt']) &&
+             data.img is string && data.img.size() > 0 &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 100 &&
+             data.category is string && data.category.size() > 0 && data.category.size() < 50 &&
+             data.createdAt is number;
+    }
+
+    match /portfolio/{itemId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidPortfolioItem(request.resource.data);
+      allow update: if isAdmin() && isValidPortfolioItem(request.resource.data);
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "entities": {
+    "PortfolioItem": {
+      "title": "PortfolioItem",
+      "description": "A single portfolio item showcasing a design.",
+      "type": "object",
+      "properties": {
+        "img": {
+          "type": "string",
+          "description": "URL or base64 string of the image."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the portfolio item."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the portfolio item."
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp when the item was created."
+        }
+      },
+      "required": ["img", "title", "category", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/portfolio/{itemId}": {
+      "schema": {
+        "$ref": "#/entities/PortfolioItem"
+      },
+      "description": "Collection of portfolio items."
+    }
+  }
+}
