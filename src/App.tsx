@@ -4,6 +4,7 @@ import { Mail, Phone, Facebook, MessageCircle, ArrowRight, Palette, Layout, Imag
 import { auth, db, googleProvider } from './firebase';
 import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { collection, onSnapshot, addDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { AIChatbot } from './components/AIChatbot';
 
 enum OperationType {
   CREATE = 'create',
@@ -866,6 +867,8 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <AIChatbot />
     </div>
   );
 }
